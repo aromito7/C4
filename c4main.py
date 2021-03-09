@@ -3,7 +3,7 @@ import random
 from graphics import *
 
 class Player:
-	player_types = ["AI", "ML", "PL"]
+	player_types = ["AI", "NN", "PL"]
 	player_type = None
 	def __init__(self, player_type):
 		self.player_type = player_type
@@ -12,13 +12,29 @@ class Player:
 		if self.player_type == "AI":
 			return self.ai_decide(board, player_number)
 		
+	def check_for_immediate_win(self, board, player_number):
+		max_chains = [-1,0,0,0,0,0,0,0,-1]
+		for a in range(1,8):
+			max_chains[a] = board.check_all_chains_with_expansion([a, board.available[a]], player_number)
+
+		for a in range(1,8):			#First priority is winning immediately
+			if max_chains[a] > 3: return a
+		return -1
+
+	def check_if_opponent_has_win(self, board, player_number):
+		return False
+
 	def ai_decide(self, board, player_number):
 		max_chains = [-1,0,0,0,0,0,0,0,-1]
 		opp_chains = [-1,0,0,0,0,0,0,0,-1]
+		opp_next = [-1,0,0,0,0,0,0,0,-1]
 		for a in range(1,8):
 			max_chains[a] = board.check_all_chains_with_expansion([a, board.available[a]], player_number)
 			opp_chains[a] = board.check_all_chains_with_expansion([a, board.available[a]], 3-player_number)
-		
+			if board.available[a] < 7:
+				opp_next[a] = board.check_all_chains_with_expansion([a, board.available[a] + 1], 3-player_number)
+
+
 		#print(max_chains)
 		#print(opp_chains)
 
@@ -26,7 +42,9 @@ class Player:
 			if max_chains[a] > 3: return a
 		for a in range(1,8):				#Second priority is preventing opponent from winning
 			if opp_chains[a] > 3: return a
-		
+		for a in range(1,8):
+			if opp_next[a] > 4: max_chains[a] = -1
+
 		possible_moves = []
 		for a in range(len(board.available)):		#Third priority is creating the longest chain possible
 			if max_chains[a] == max(max_chains):
