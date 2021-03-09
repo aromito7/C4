@@ -1,2 +1,2 @@
 # C4
-Connect Four is a solved game, but I'm doing a quick project to get back into programming with a neural network that learns to play the game.
+I took an online class for Machine Learning in python so I'm practicing what I learned with a Neural Network that learns how to play Connect Four in Python.
