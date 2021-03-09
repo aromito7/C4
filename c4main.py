@@ -12,7 +12,7 @@ class Player:
 		if self.player_type == "AI":
 			return self.ai_decide(board, player_number)
 		
-	def check_for_immediate_win(self, board, player_number):
+	def check_for_immediate_win(self, board, player_number):  #This only returns the first column which can immediately win the game
 		max_chains = [-1,0,0,0,0,0,0,0,-1]
 		for a in range(1,8):
 			max_chains[a] = board.check_all_chains_with_expansion([a, board.available[a]], player_number)
@@ -22,9 +22,53 @@ class Player:
 		return -1
 
 	def check_if_opponent_has_win(self, board, player_number):
-		return False
+		opp_chains = [-1,0,0,0,0,0,0,0,-1]
+		for a in range(1,8):
+			opp_chains[a] = board.check_all_chains_with_expansion([a, board.available[a]], 3-player_number)
+		
+		for a in range(1,8):				#Second priority is preventing opponent from winning
+			if opp_chains[a] > 3: return a	
+		return -1
+
+	def check_which_move_gives_opponent_win(self, board, player_number):
+		moves = []
+		opp_next = [-1,0,0,0,0,0,0,0,-1]
+		for a in range(1,8):
+			if board.available[a] < 7:
+				opp_next[a] = board.check_all_chains_with_expansion([a, board.available[a] + 1], 3-player_number)
+				if opp_next[a] > 3:
+					moves.append(a)
+
+		return moves
 
 	def ai_decide(self, board, player_number):
+		move = self.check_for_immediate_win(board, player_number)
+		if move > 0: return move
+
+		move = self.check_if_opponent_has_win(board, player_number)
+		if move > 0: return move
+
+		bad_moves = self.check_which_move_gives_opponent_win(board, player_number)
+		moves = []
+
+		for i in range(1,8):
+			if board.available[i] < 6 and i not in bad_moves: 
+				moves.append([i, 0])
+		greatest = 0
+		greatest_moves = []
+		for move in moves:
+			print(move)
+			x = move[0]
+			moves[1] = board.check_all_chains_with_expansion([x, board.available[x]], player_number)
+			if moves[1] > greatest:
+				greatest = moves[1]
+				greatest_moves = [x]
+			if moves[1] == greatest:
+				greatest_moves.append(x)
+
+		return random.choice(greatest_moves)
+
+	def ai_decide2(self, board, player_number):
 		max_chains = [-1,0,0,0,0,0,0,0,-1]
 		opp_chains = [-1,0,0,0,0,0,0,0,-1]
 		opp_next = [-1,0,0,0,0,0,0,0,-1]
