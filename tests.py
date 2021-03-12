@@ -159,7 +159,6 @@ class TestWinConditions(unittest.TestCase):
 		game = self.create_test_game_2()
 		board = game.board
 		board.place(5,2)
-		print(board)
 		move = game.players[0].check_which_move_gives_opponent_win(board, 1)
 		self.assertEqual(move, [1,4])
 
@@ -211,14 +210,12 @@ class TestWinConditions(unittest.TestCase):
 
 
 
-	def X_test_ai_choice_6(self):  #This tests the AI's ability to not move somewhere that gives the opponent the win
+	def test_ai_choice_6(self):  #This tests the AI's ability to not move somewhere that gives the opponent the win
 		game = c4main.Game(c4main.Player("AI"), None)
 		board = game.board
-		board.place(1,2).place(2,1).place(3,1).place(1,1).place(2,1).place(3,2).place(3,2).place(2,2).place(1,1).place(1,1).place(1,2).place(2,2).place(6,1)
+		board.place(1,2).place(2,1).place(3,1).place(1,1).place(2,1).place(3,2).place(3,2).place(2,2).place(1,1).place(1,1).place(1,2).place(2,2).place(6,2).place(6,2).place(7,1)
 		move = game.players[0].decide(board, 1)
-		print(board)
-		print(move)
-		self.assertEqual(move, 6)
+		self.assertEqual(move, 7)
 
 	def test_ai_play_game_0(self):
 		game = c4main.Game(c4main.Player("AI"), c4main.Player("AI"))

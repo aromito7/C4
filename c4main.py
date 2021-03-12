@@ -50,20 +50,18 @@ class Player:
 
 		bad_moves = self.check_which_move_gives_opponent_win(board, player_number)
 		moves = []
-
 		for i in range(1,8):
-			if board.available[i] < 6 and i not in bad_moves: 
+			if board.available[i] < 8 and i not in bad_moves: 
 				moves.append([i, 0])
 		greatest = 0
 		greatest_moves = []
 		for move in moves:
-			print(move)
 			x = move[0]
-			moves[1] = board.check_all_chains_with_expansion([x, board.available[x]], player_number)
-			if moves[1] > greatest:
-				greatest = moves[1]
+			move[1] = board.check_all_chains_with_expansion([x, board.available[x]], player_number)
+			if move[1] > greatest:
+				greatest = move[1]
 				greatest_moves = [x]
-			if moves[1] == greatest:
+			if move[1] == greatest:
 				greatest_moves.append(x)
 
 		return random.choice(greatest_moves)
