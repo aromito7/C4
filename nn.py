@@ -19,9 +19,6 @@ def main():
 		else: temp = np.append(temp, -1)
 		data = np.concatenate((data, [temp]))
 
-	
-	print(data)
-
 
 	first = np.random.rand(inputs,layer_width)
 	middle = np.random.rand(layers-1, layer_width, layer_width)
@@ -29,22 +26,17 @@ def main():
 
 
 	result = [1,0]
-	result = result@first
-	#print(result)
-	for M in middle:
-		result = result@M
-		#print(result)
 
-	result = result@last
 
-	#print(result)
-	#print(sigmoid(result))
+	result = propagate(result, first, middle, last, tanh)
+	print(result)
 
 	a = np.array([	[1,0],
 					[0,1]])
 
 	b = np.array([	[4,1],
 					[2,2]])
+
 
 def tanh(x):
 	e_pos_x = np.exp(x)
@@ -55,9 +47,21 @@ def tanh(x):
 
 def sigmoid(x):
 	result = 1 / (1+ np.exp(-x))
-
 	return result
 
+def multiply_activate(inputs, weights, activation):
+	results = inputs@weights
+	results = activation(results)
+	return results
+
+def propagate(inputs, first, middle, last, activation):
+	result = inputs
+	result = multiply_activate(result, first, tanh)
+	for m in middle:
+		result = multiply_activate(result, m, tanh)
+	result = multiply_activate(result, last, tanh)
+
+	return result
 
 if __name__ == '__main__':
 	main()
