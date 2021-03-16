@@ -4,12 +4,12 @@ import numpy as np
 
 
 def main():
-	learning_rate = .001
+	learning_rate = .01
 	exploration_rate = .2
 	inputs = 2
-	layers = 7
+	layers = 3
 	layer_width = 4
-	outputs = 1
+	outputs = 3
 
 	data = [[5,4,1]]
 
@@ -19,6 +19,7 @@ def main():
 		else: temp = np.append(temp, -1)
 		data = np.concatenate((data, [temp]))
 
+	#print(data)
 
 	first = np.random.rand(inputs,layer_width)
 	middle = np.random.rand(layers-1, layer_width, layer_width)
@@ -38,11 +39,13 @@ def main():
 					[2,2]])
 
 
+def derivative_tanh(x):
+	return 1 - tanh(x)**2
+
 def tanh(x):
 	e_pos_x = np.exp(x)
 	e_neg_x = np.exp(-x)
 	result = (e_pos_x - e_neg_x)/(e_pos_x + e_neg_x)
-
 	return result
 
 def sigmoid(x):
@@ -62,6 +65,12 @@ def propagate(inputs, first, middle, last, activation):
 	result = multiply_activate(result, last, tanh)
 
 	return result
+
+def back_propagate(inputs, first, middle, last, activation, result):
+	
+
+	return [first, middle, last]
+
 
 if __name__ == '__main__':
 	main()
