@@ -5,7 +5,7 @@ from graphics import *
 class Player:
 	player_types = ["AI", "NN", "PL"]
 	player_type = None
-	def __init__(self, player_type):
+	def __init__(self, player_type = "AI"):
 		self.player_type = player_type
 
 	def decide(self, board, player_number):
@@ -152,6 +152,7 @@ class Board:
 
 	def place(self, x, player):
 		if self.available[x] > 6:
+			x = 1/0
 			print("Too high to place.")
 			return
 		self.previous = [x, self.available[x]]

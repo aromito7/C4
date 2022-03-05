@@ -1,5 +1,6 @@
 import unittest
 import c4main
+import nn
 
 class TestWinConditions(unittest.TestCase):
 	#rows = [[0 for col in range(7)] for row in range(6)]
@@ -55,8 +56,6 @@ class TestWinConditions(unittest.TestCase):
 	def test_place2(self):
 		board = self.create_test_board_0()
 
-		board.place(3, 2)
-		board.place(3, 2)
 		board.place(3, 2)
 		board.check_all_chains([3,6],2)
 		self.assertEqual(board.rows[3][6], 2)

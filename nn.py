@@ -25,11 +25,10 @@ def main():
 	middle = np.random.rand(layers-1, layer_width, layer_width)
 	last = np.random.rand(layer_width, outputs)
 
-
 	result = [1,0]
 
 
-	result = propagate(result, first, middle, last, tanh)
+	result, first_inputs, middle_inputs, last_inputs, first_outputs, middle_outputs, last_outputs = propagate(result, first, middle, last, tanh)
 	print(result)
 
 	a = np.array([	[1,0],
@@ -38,9 +37,19 @@ def main():
 	b = np.array([	[4,1],
 					[2,2]])
 
+def error_function(targets, outputs):
+	error = 0
+	length = len(outputs)
+	for i in range(length):
+		temp = (outputs[i] - targets[i])**2
+		error += temp
 
-def derivative_tanh(x):
-	return 1 - tanh(x)**2
+	error/= (length*2)
+
+	return error
+
+def deriv_activation(x):
+	return 1 - activation(x)**2
 
 def tanh(x):
 	e_pos_x = np.exp(x)
@@ -53,21 +62,21 @@ def sigmoid(x):
 	return result
 
 def multiply_activate(inputs, weights, activation):
-	results = inputs@weights
-	results = activation(results)
-	return results
+	inputs = inputs@weights
+	outputs = activation(inputs)
+	return inputs, outputs
 
 def propagate(inputs, first, middle, last, activation):
 	result = inputs
-	result = multiply_activate(result, first, tanh)
-	for m in middle:
-		result = multiply_activate(result, m, tanh)
-	result = multiply_activate(result, last, tanh)
+	result = multiply_activate(result, first, activation)
+	for i in range(len(middle)):
+		 middle_inputs[i], middle= multiply_activate(result, middle[i], activation)
+	result = multiply_activate(result, last, activation)
 
 	return result
 
 def back_propagate(inputs, first, middle, last, activation, result):
-	
+		
 
 	return [first, middle, last]
 
