@@ -49,10 +49,8 @@ class Player:
 		if move > 0: return move
 
 		bad_moves = self.check_which_move_gives_opponent_win(board, player_number)
-		moves = []
-		for i in range(1,8):
-			if board.available[i] < 8 and i not in bad_moves: 
-				moves.append([i, 0])
+		moves = [[i, 0] for i in range(1,8) if i not in bad_moves]
+		
 		greatest = 0
 		greatest_moves = []
 		for move in moves:

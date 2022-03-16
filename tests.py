@@ -207,8 +207,6 @@ class TestWinConditions(unittest.TestCase):
 		move = game.players[0].decide(board,1)
 		self.assertTrue(move > 0 and move < 8)
 
-
-
 	def test_ai_choice_6(self):  #This tests the AI's ability to not move somewhere that gives the opponent the win
 		game = c4main.Game(c4main.Player("AI"), None)
 		board = game.board
