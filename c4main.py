@@ -11,6 +11,12 @@ class Player:
 	def decide(self, board, player_number):
 		if self.player_type == "AI":
 			return self.ai_decide(board, player_number)
+		if self.player_type == "PL":
+			p = board.win.getMouse()
+			x, y = p.x, p.y
+			print(x,y, board.tile, x // board.tile)
+			return int(x // board.tile) + 1
+
 		
 	def check_for_immediate_win(self, board, player_number):  #This only returns the first column which can immediately win the game
 		max_chains = [-1,0,0,0,0,0,0,0,-1]
@@ -98,6 +104,7 @@ class Board:
 		self.available = [7,1,1,1,1,1,1,1,7]
 		self.previous = [None, None]
 		self.victory = 0
+		self.tile = 50
 
 		rows = [[0 for y in range(8)] for x in range(9)]
 		for x in range(9):
@@ -119,10 +126,11 @@ class Board:
 		colors = ['white', 'red', 'black']
 		for x in range(1, 8): 
 			for y in range(1, 7):
-				circle = Circle(Point(-25 + x*50, 325 - y*50), 20)
+				t = self.tile
+				circle = Circle(Point(-t//2 + x*t, (6.5 * t) - y*t), .4*t)
 				circle.setFill(colors[rows[x][y]])
 				circle.draw(win)
-		win.getMouse()
+		#win.getMouse()
 
 	def update(self, move):
 		if not hasattr(self, 'win'):
@@ -135,12 +143,12 @@ class Board:
 		x = move
 		y = self.available[move]-1
 		colors = ['white', 'red', 'black']
-
-		circle = Circle(Point(-25 + x*50, 325 - y*50), 20)
+		t = self.tile
+		circle = Circle(Point(-t//2 + x*t, (6.5 * t) - y*t), .4*t)
 		circle.setFill(colors[rows[x][y]])
 		circle.draw(win)
 
-		win.getMouse()
+		#win.getMouse()
 
 	def __str__(self):
 		self.update(self.previous[0])
@@ -274,10 +282,12 @@ class Game:
 
 
 def main():
-	p1 = Player()
-	p2 = Player()
 
-	Game(p1,p2)
+	p1 = Player()
+	p2 = Player("PL")
+
+	game = Game(p1,p2)
+	game.start()
 
 if __name__ == '__main__':
 	main()
