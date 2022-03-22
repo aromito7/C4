@@ -17,7 +17,6 @@ class Player:
 			print(x,y, board.tile, x // board.tile)
 			return int(x // board.tile) + 1
 
-		
 	def check_for_immediate_win(self, board, player_number):  #This only returns the first column which can immediately win the game
 		max_chains = [-1,0,0,0,0,0,0,0,-1]
 		for a in range(1,8):
@@ -100,11 +99,13 @@ class Player:
 
 
 class Board:
-	def __init__(self):
+	def __init__(self, tile = 50):
 		self.available = [7,1,1,1,1,1,1,1,7]
 		self.previous = [None, None]
 		self.victory = 0
-		self.tile = 50
+		self.tile = tile
+		self.width = tile*7
+		self.height = tile*6
 
 		rows = [[0 for y in range(8)] for x in range(9)]
 		for x in range(9):
@@ -268,6 +269,44 @@ class Game:
 		self.current_player = 1
 		self.turns = 0
 
+	def menu(self):
+		width, height = self.board.width, self.board.height
+		win = GraphWin('C4 Menu', width, height)
+		self.win = win
+
+		background = Rectangle(Point(0, 0), Point(width, height))
+		background.setFill('Black')
+		background.draw(win)
+		
+		left_button = Rectangle(Point(0, height//2), Point(width//2, height))
+		left_button.setFill('Black')
+		left_button.draw(win)
+		left_button_text = Text(Point(width//4, (height*3)//4), 'Play Basic AI')
+		left_button_text.setTextColor("White")
+		left_button_text.setSize(16)
+		left_button_text.draw(win)
+
+		right_button = Rectangle(Point(width//2, height//2), Point(width, height))
+		right_button.setFill('Black')
+		right_button.draw(win)
+		right_button_text = Text(Point((width*3)//4, (height*3)//4), 'Neural Network')
+		right_button_text.setTextColor("White")
+		right_button_text.setSize(16)
+		right_button_text.draw(win)
+
+		label = Text(Point(width//2, height//4), 'Connect Four')
+		label.setTextColor("Red")
+		label.setSize(36)
+		label.draw(win)
+		stay_on_menu = True
+		while stay_on_menu:
+			click = win.getMouse()
+			x, y = click.x, click.y
+
+
+
+
+
 	def start(self):
 		while self.board.victory == 0:
 			move = self.players[self.current_player-1].decide(self.board, self.current_player)
@@ -287,7 +326,7 @@ def main():
 	p2 = Player("PL")
 
 	game = Game(p1,p2)
-	game.start()
+	game.menu()
 
 if __name__ == '__main__':
 	main()
