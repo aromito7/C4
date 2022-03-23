@@ -116,7 +116,7 @@ class Board:
 
 		self.rows = rows
 
-	def create(self):
+	def start(self):
 		win = GraphWin('Connect 4', 350, 300)
 		self.win = win
 		rows = self.rows
@@ -131,11 +131,11 @@ class Board:
 				circle = Circle(Point(-t//2 + x*t, (6.5 * t) - y*t), .4*t)
 				circle.setFill(colors[rows[x][y]])
 				circle.draw(win)
-		#win.getMouse()
+		win.getMouse()
 
 	def update(self, move):
 		if not hasattr(self, 'win'):
-			self.create()
+			self.start()
 			return
 
 		rows = self.rows
@@ -159,8 +159,9 @@ class Board:
 
 	def place(self, x, player):
 		if self.available[x] > 6:
+			print("Player: {} can't place in column {} due to height.".format(player, x))
+			self.win.getMouse()
 			x = 1/0
-			print("Too high to place.")
 			return
 		self.previous = [x, self.available[x]]
 		self.rows[x][self.available[x]] = player
@@ -302,6 +303,7 @@ class Game:
 		while stay_on_menu:
 			click = win.getMouse()
 			x, y = click.x, click.y
+			stay_on_menu = False
 
 
 
