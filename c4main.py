@@ -53,9 +53,14 @@ class Player:
 		move = self.check_if_opponent_has_win(board, player_number)
 		if move > 0: return move
 
+
+
 		bad_moves = self.check_which_move_gives_opponent_win(board, player_number)
-		moves = [[i, 0] for i in range(1,8) if i not in bad_moves]
-		
+		max_height = [i for i in range(1,8) if board.available[i] > 6]
+		moves = [i for i in range(1,8) if i not in max_height]
+		if len(moves) == 1:
+			return moves[0]
+		moves = [[i, 0] for i in moves if i not in bad_moves]
 		greatest = 0
 		greatest_moves = []
 		for move in moves:
@@ -215,13 +220,11 @@ class Board:
 
 		if y > 6: return [0,0]
 
-
 		temp = 1
 		while self.rows[x-temp*dx][y-temp*dy] == player:
 			temp+=1
 			count+=1
 
-		
 		while self.rows[x-temp*dx][y-temp*dy] == 0:
 			temp+=1
 			expand+=1
@@ -276,22 +279,22 @@ class Game:
 		self.win = win
 
 		background = Rectangle(Point(0, 0), Point(width, height))
-		background.setFill('Black')
+		background.setFill('White')
 		background.draw(win)
 		
 		left_button = Rectangle(Point(0, height//2), Point(width//2, height))
-		left_button.setFill('Black')
+		left_button.setFill('White')
 		left_button.draw(win)
 		left_button_text = Text(Point(width//4, (height*3)//4), 'Play Basic AI')
-		left_button_text.setTextColor("White")
+		left_button_text.setTextColor("Black")
 		left_button_text.setSize(16)
 		left_button_text.draw(win)
 
 		right_button = Rectangle(Point(width//2, height//2), Point(width, height))
-		right_button.setFill('Black')
+		right_button.setFill('White')
 		right_button.draw(win)
 		right_button_text = Text(Point((width*3)//4, (height*3)//4), 'Neural Network')
-		right_button_text.setTextColor("White")
+		right_button_text.setTextColor("Black")
 		right_button_text.setSize(16)
 		right_button_text.draw(win)
 
@@ -303,7 +306,13 @@ class Game:
 		while stay_on_menu:
 			click = win.getMouse()
 			x, y = click.x, click.y
-			stay_on_menu = False
+			if y > height//2 and x < width//2:
+				p1 = Player()
+				p2 = Player("PL")
+				game = Game(p1,p2)
+				game.start()
+
+			stay_on_menu = False	
 
 
 
