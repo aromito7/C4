@@ -13,8 +13,8 @@ class Player:
 			return self.ai_decide(board, player_number)
 		if self.player_type == "PL":
 			p = board.win.getMouse()
-			x, y = p.x, p.y
-			print(x,y, board.tile, x // board.tile)
+			x, y = int(p.x), int(p.y)
+			#print(x,y, board.tile, x // board.tile)
 			return int(x // board.tile) + 1
 
 	def check_for_immediate_win(self, board, player_number):  #This only returns the first column which can immediately win the game
@@ -282,12 +282,13 @@ class Game:
 		width, height = self.board.width, self.board.height
 		win = GraphWin('C4 Menu', width, height)
 		self.win = win
+		buttons = 3
 
 		background = Rectangle(Point(0, 0), Point(width, height))
 		background.setFill('White')
 		background.draw(win)
 		
-		left_button = Rectangle(Point(0, height//2), Point(width//2, height))
+		left_button = Rectangle(Point(0, height//2), Point(width//buttons, height))
 		left_button.setFill('White')
 		left_button.draw(win)
 		left_button_text = Text(Point(width//4, (height*3)//4), 'Play Basic AI')
@@ -295,13 +296,14 @@ class Game:
 		left_button_text.setSize(16)
 		left_button_text.draw(win)
 
-		right_button = Rectangle(Point(width//2, height//2), Point(width, height))
+		right_button = Rectangle(Point(width//buttons, height//2), Point(width, height))
 		right_button.setFill('White')
 		right_button.draw(win)
 		right_button_text = Text(Point((width*3)//4, (height*3)//4), 'Neural Network')
 		right_button_text.setTextColor("Black")
 		right_button_text.setSize(16)
 		right_button_text.draw(win)
+
 
 		label = Text(Point(width//2, height//4), 'Connect Four')
 		label.setTextColor("Red")
@@ -317,7 +319,10 @@ class Game:
 				game = Game(p1,p2)
 				game.start()
 
-				stay_on_menu = False	
+				stay_on_menu = True
+			if y > height//2 and x > width//2:
+				stay_on_menu = False
+				win.close()
 
 
 
@@ -330,10 +335,10 @@ class Game:
 			self.board.update(move)
 			self.current_player = 3 - self.current_player
 			self.turns += 1
-			print(self.turns)
+			#print(self.turns)
 		print("Player: " + str(self.board.victory) + " wins!")
 		self.board.win.getMouse()
-
+		self.board.win.close()
 
 
 def main():
