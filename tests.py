@@ -222,6 +222,17 @@ class TestWinConditions(unittest.TestCase):
 		move = game.players[0].decide(board, 1)
 		self.assertEqual(move, 4)
 
+	def test_ai_choise_8(self):  #Tests whether a move will be made when there atleast two moves that all lose the game.
+		game = c4main.Game(c4main.Player("AI"), c4main.Player("AI"))
+		board = game.board
+		board.place(1,2).place(1,2).place(1,1).place(1,1).place(1,2).place(1,2)
+		board.place(3,1).place(3,2).place(3,1).place(3,2).place(3,2).place(3,1)
+		board.place(4,2).place(4,2).place(4,1).place(4,2).place(4,2).place(4,1)
+		board.place(5,1).place(5,2).place(5,1).place(5,2).place(5,2).place(5,1)
+		board.place(7,2).place(7,2).place(7,1).place(7,1).place(7,2).place(7,2)
+		move = game.players[0].decide(board, 1)
+		self.assertTrue(move in [2, 6])
+
 	def test_ai_play_game_0(self):
 		game = c4main.Game(c4main.Player("AI"), c4main.Player("AI"))
 		#game.start()

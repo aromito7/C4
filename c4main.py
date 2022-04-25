@@ -53,14 +53,19 @@ class Player:
 		move = self.check_if_opponent_has_win(board, player_number)
 		if move > 0: return move
 
-
-
 		bad_moves = self.check_which_move_gives_opponent_win(board, player_number)
 		max_height = [i for i in range(1,8) if board.available[i] > 6]
 		moves = [i for i in range(1,8) if i not in max_height]
 		if len(moves) == 1:
 			return moves[0]
-		moves = [[i, 0] for i in moves if i not in bad_moves]
+		
+		safe_moves = [[i, 0] for i in moves if i not in bad_moves]
+		
+		if len(safe_moves) == 0:
+			return random.choice(moves)
+
+		moves = safe_moves
+
 		greatest = 0
 		greatest_moves = []
 		for move in moves:
@@ -312,7 +317,7 @@ class Game:
 				game = Game(p1,p2)
 				game.start()
 
-			stay_on_menu = False	
+				stay_on_menu = False	
 
 
 
